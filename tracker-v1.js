@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // You can use any geocoding service that suits your needs
     // Here we use the GeoNames API as an example
     // You need to register for a free account and get an API key
-    const apiKey = 'YOUR_API_KEY';
+    const apiKey = 'xekhai';
     const url = `http://api.geonames.org/countryCodeJSON?lat=${lat}&lng=${lon}&username=${apiKey}`;
     fetch(url)
       .then((response) => response.json())
@@ -98,20 +98,28 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Function to send data to your server-side endpoint
-  function sendData() {
-    fetch('/track-traffic', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(trafficData),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log('Success:', data))
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-  }
+// Function to send data to your server-side endpoint
+function sendData() {
+  // Add the user ID to the data object
+  trafficData.userId = userId;
+  // Change the URL to the one you want
+  fetch('https://growthapp-backend-c991.onrender.com/api/data/track-traffic', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(trafficData),
+  })
+    .then((response) => response.json())
+    .then((data) => console.log('Success:', data))
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+
+  
+// Get the user ID from the query parameter
+var userId = new URLSearchParams(window.location.search).get('userId');
 
   // Check if Geolocation is supported
   if (navigator.geolocation) {
